@@ -22,13 +22,16 @@ def getcoinprice(coin):
     # print(r.text)
     soup  = BeautifulSoup(r.text,'lxml')
     try:
-        price = soup.find_all('div',attrs={'class':"price mt-green"})[0].text[3:].strip()
-        change = soup.find_all('div',attrs={'class':"percent percent-up"})[0]
-        changeprice=change.find_all('span')[0].text
+        priceinfo = soup.find_all('div',attrs={'class':"price-wrapper"})[0].find_all('div')
+        # print(priceinfo)
+        price=priceinfo[0].text[3:].strip()
+        change=priceinfo[1]
+        changeprice=change.find_all('span')[0].text.strip()
         changepercent = change.find_all('span')[1].text.strip()
         # print(price,changeprice,changepercent)
         return price,changeprice,changepercent
-    except:
+    except Exception as e:
+        print(e)
         raise ValueError('获取失败')
 if __name__ == '__main__':
-    getcoinprice('eth')
+    getcoinprice('bntde')

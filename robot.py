@@ -11,13 +11,13 @@ import datetime
 bot = Bot(cache_path=True,console_qr=True)
 # 加载配置信息到机器人
 load.load_config_to_bot(bot)
-
+charset='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
 """好友功能"""
-# @bot.register(msg_types=FRIENDS)
-# def auto_accept_friends(msg):
-#     """自动接受好友请求"""
-#     wx_reply.auto_accept_friends(msg)
+@bot.register(msg_types=FRIENDS)
+def auto_accept_friends(msg):
+    """自动接受好友请求"""
+    wx_reply.auto_accept_friends(msg)
 
 
 # @bot.register(chats=Friend)
@@ -62,31 +62,44 @@ load.load_config_to_bot(bot)
 #         msg.forward(msg.bot.master, prefix='监听指定好友群消息：「{0}」在「{1}」发了消息：'.format(msg.member.is_friend.remark_name or msg.member.nick_name, msg.chat.name))
 #     return None
 
+# @bot.register()
+# def senduseful(msg):
+#     print('senduseful')
+#     # print(msg)
+#     # print(msg.text)
+#     # print(type(msg.chat))
+
+'''查询价格'''
 @bot.register()
-def senduseful(msg):
-    # print(msg)
-    # print(msg.text)
-    # print(type(msg.chat))
+def coinprice(msg):
     keywords=['mikecrm','jinshuju','金数据','麦客','抽奖','大毛']
     for keyword in keywords:
         if keyword in msg.text:
+            print(msg.text)
             # print(msg)
             msg.forward(msg.bot.master,prefix=msg.chat)
-'''查询价格'''
-@bot.register(chats=Group)
-def group_msg(msg):
-    # print(msg)
-    if len(msg.text)<8 and msg.text.isalpha():
-        try:
-            price,changeprice,changepercent = getcoinprice(msg.text)
-            msg.reply(
-                '{}当前价格：{}\n'
-                '当天涨幅：{}{}\n'
-                '{}'.format(msg.text.upper(),price,changeprice,changepercent,datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
-            )
-        except:
-            pass
+    # print(msg.type)
+    try:
+        if msg.type == 'Text':
+            if 2<=len(msg.text) <= 6:
+                for each in msg.text:
+                    if each not in charset:
+                        raise IndexError('匹配失败')
 
+                try:
+                    print(msg.text)
+                    price,changeprice,changepercent = getcoinprice(msg.text)
+                    msg.reply(
+                        '{}当前价格：{}\n'
+                        '当天涨幅：{}{}\n'
+                        '{}'.format(msg.text.upper(),price,changeprice,changepercent,datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+                    )
+                except Exception as e:
+                    print(e)
+                    pass
+    except Exception as e:
+        print(e)
+        pass
 
 
 
