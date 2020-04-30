@@ -75,6 +75,7 @@ def senduseful(msg):
 '''查询价格'''
 @bot.register(chats=Group)
 def group_msg(msg):
+    # print(msg)
     if len(msg.text)<8 and msg.text.isalpha():
         try:
             price,changeprice,changepercent = getcoinprice(msg.text)
