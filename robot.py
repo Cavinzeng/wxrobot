@@ -1,9 +1,9 @@
 from wxpy import *
-
+from getprice import *
 import wx_reply
 import wx_command
 import load
-
+import datetime
 
 # 微信机器人，缓存登录信息
 # 如果你需要部署在服务器中，则在下面加入一个入参console_qr=True
@@ -72,6 +72,22 @@ def senduseful(msg):
         if keyword in msg.text:
             # print(msg)
             msg.forward(msg.bot.master,prefix=msg.chat)
+'''查询价格'''
+@bot.register(chats=Group)
+def group_msg(msg):
+    if len(msg.text)<8 and msg.text.isalpha():
+        try:
+            price,changeprice,changepercent = getcoinprice(msg.text)
+            msg.reply(
+                '{}当前价格：{}\n'
+                '当天涨幅：{}{}\n'
+                '{}'.format(msg.text.upper(),price,changeprice,changepercent,datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+            )
+        except:
+            pass
+
+
+
 
 # @bot.register(msg_types=NOTE)
 # def system_msg(msg):
