@@ -20,18 +20,26 @@ def getcoinprice(coin):
     fun,headers = str2header(raw_headers)
     r = requests.get(url,headers=headers,verify=False,timeout=30)
     # print(r.text)
-    soup  = BeautifulSoup(r.text,'lxml')
+    soup  = BeautifulSoup(r.text,'html.parser')
     try:
-        priceinfo = soup.find_all('div',attrs={'class':"price-wrapper"})[0].find_all('div')
+        first = soup.find_all('a',attrs={'class':'coin-name'})[0]
+        # print(first)
+        trueurl='https://www.mytokencap.com'+first.get('href')
+        # print(trueurl)
+        r = requests.get(trueurl, headers=headers, verify=False, timeout=30)
+        soup1 = BeautifulSoup(r.text, 'html.parser')
+        priceinfo = soup1.find_all('div', attrs={'class': "price-wrapper wrapper-left"})[0].find_all('div')
         # print(priceinfo)
-        price=priceinfo[0].text[3:].strip()
+        price=priceinfo[0].text[5:].replace(" ","").strip()
         change=priceinfo[1]
-        changeprice=change.find_all('span')[0].text.strip()
+        changeprice=change.find_all('span')[0].text.replace(" ","").replace('\n','')
         changepercent = change.find_all('span')[1].text.strip()
+        usdprice = priceinfo[2].text.replace(" ","").strip()
+        print(usdprice)
         # print(price,changeprice,changepercent)
-        return price,changeprice,changepercent
+        return price,usdprice,changeprice,changepercent
     except Exception as e:
         print(e)
         raise ValueError('获取失败')
 if __name__ == '__main__':
-    getcoinprice('bntde')
+    getcoinprice('sc')

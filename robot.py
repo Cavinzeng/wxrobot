@@ -88,11 +88,11 @@ def coinprice(msg):
 
                 try:
                     print(msg.text)
-                    price,changeprice,changepercent = getcoinprice(msg.text)
+                    price,usdprice,changeprice,changepercent = getcoinprice(msg.text)
                     msg.reply(
-                        '{}当前价格：{}\n'
+                        '{}当前价格：{}{}\n'
                         '当天涨幅：{}{}\n'
-                        '{}'.format(msg.text.upper(),price,changeprice,changepercent,datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+                        '{}'.format(msg.text.upper(),price,usdprice,changeprice,changepercent,datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
                     )
                 except Exception as e:
                     print(e)
