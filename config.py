@@ -11,7 +11,7 @@ is_forward_revoke_msg = True  # 开启防撤回模式
 is_forward_group_at_msg = False  # 转发群@我的消息
 
 # 机器人主人
-bot_master_name = ''  # 使用备注名更安全，只允许一个，可远程控制机器人，如果不设置(空)则将文件助手设置为管理员，但不具备远程控制功能
+bot_master_name = '我的电信'  # 使用备注名更安全，只允许一个，可远程控制机器人，如果不设置(空)则将文件助手设置为管理员，但不具备远程控制功能
 
 # 监听某些好友群聊，如老板
 is_listen_friend = False
